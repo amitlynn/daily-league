@@ -14,7 +14,12 @@ const state = {
 };
 
 function today() {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: C.TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+  // formatToParts: works the same on every phone (some Android versions format en-CA as M/D/Y)
+  try {
+    const p = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone: C.TZ, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date()).map(x => [x.type, x.value]));
+    if (p.year && p.month && p.day) return `${p.year}-${p.month}-${p.day}`;
+  } catch {}
+  const d = new Date(Date.now() + 2 * 3600000); return d.toISOString().slice(0, 10);
 }
 function niceDate(d) {
   const t = today();
@@ -74,7 +79,8 @@ function render() {
   $("#me-chip").innerHTML = `${esc(state.me.avatar)} ${esc(state.me.name)}`;
   const [r, arg] = (location.hash.slice(1) || "today").split("/");
   document.querySelectorAll(".nav a").forEach(a => a.classList.toggle("on", a.dataset.r === (r === "player" ? "players" : r)));
-  (routes[r] || viewToday)(arg ? decodeURIComponent(arg) : undefined);
+  try { (routes[r] || viewToday)(arg ? decodeURIComponent(arg) : undefined); }
+  catch (e) { console.error(e); $("#app").innerHTML = `<div class="loading">משהו נשבר 😕<br><span class="small">${esc(e.message)}</span><br><br><button class="btn" onclick="location.reload()">רענן</button></div>`; }
 }
 window.addEventListener("hashchange", () => { render(); window.scrollTo(0, 0); });
 
@@ -416,6 +422,8 @@ async function shareLink() {
 }
 
 /* ---------- boot ---------- */
+window.addEventListener("error", e => toast("שגיאה: " + (e.message || e), 1));
+window.addEventListener("unhandledrejection", e => toast("שגיאה: " + (e.reason?.message || e.reason), 1));
 let deferredInstall = null;
 window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferredInstall = e; });
 async function refresh() {

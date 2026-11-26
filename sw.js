@@ -1,5 +1,5 @@
 // Network-first service worker (keeps app installable, always fresh)
-const CACHE = "dg-v2";
+const CACHE = "dg-v3";
 const SHELL = ["./", "index.html", "style.css", "app.js", "stats.js", "config.js", "manifest.webmanifest", "icons/icon-192.png"];
 self.addEventListener("install", e => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).catch(() => {})); });
 self.addEventListener("activate", e => e.waitUntil(self.clients.claim()));
