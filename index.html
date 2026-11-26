@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ליגת המשחקים היומיים</title>
+<meta name="theme-color" content="#0f1222">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">🏆 <span>ליגת היומיים</span></div>
+  <div id="me-chip" class="me-chip"></div>
+</header>
+<main id="app"><div class="loading">טוען…</div></main>
+<button id="fab" class="fab hidden" aria-label="הוסף תוצאה">＋</button>
+<nav id="nav" class="nav hidden">
+  <a href="#today" data-r="today"><b>📅</b>היום</a>
+  <a href="#rank" data-r="rank"><b>📊</b>דירוג</a>
+  <a href="#records" data-r="records"><b>🥇</b>שיאים</a>
+  <a href="#players" data-r="players"><b>👥</b>שחקנים</a>
+  <a href="#me" data-r="me"><b>⚙️</b>אני</a>
+</nav>
+<div id="modal" class="modal hidden"><div class="sheet" id="sheet"></div></div>
+<div id="toast" class="toast hidden"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="stats.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
